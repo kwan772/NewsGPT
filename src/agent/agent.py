@@ -13,9 +13,9 @@ class Agent(ABC):
         # llm = ChatOpenAI(openai_api_key= self.api_key, temperature=0, model="gpt-3.5-turbo")
         # self.agent = initialize_agent([], llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=True)
         self.gpt_config = {
-            "engine": "gpt-3.5-turbo"
+            "engine": "gpt-3.5-turbo-16k"
         }
-        self.model = "gpt-3.5-turbo"
+        self.model = "gpt-3.5-turbo-16k"
 
 
     @abstractmethod
