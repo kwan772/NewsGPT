@@ -8,6 +8,7 @@ class ContextAgent(Agent):
 
     def query(self, context):
         self.context = context
+        openai.api_key = self.api_key
         response = openai.ChatCompletion.create(
             model = self.model,
             messages=self.context.get_messages()

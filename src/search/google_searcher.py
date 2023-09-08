@@ -1,4 +1,5 @@
 import os
+import pprint
 
 import requests
 
@@ -12,18 +13,19 @@ class GoogleSearcher(Searcher):
             self.trusted_sources = file.readlines()
         # Remove any newline characters at the end of each line
         self.trusted_sources = [line.strip() for line in self.trusted_sources]
-        print(self.trusted_sources)
+        # print(self.trusted_sources)
 
     def search(self, query):
         params = {"engine": "google", "q": query, "api_key": os.getenv("SERP_API_KEY")}
         response = requests.get("https://serpapi.com/search", params=params)
         response = response.json()
-        print(response)
+        # print(response)
 
         return self.filter_results(response)
 
     def filter_results(self, response):
         results = []
+        # pprint.pprint(response)
         if "answer_box" in response and self.is_valid_source(response["answer_box"]["source"]):
             return {
                 "title": response["answer_box"]["title"],
@@ -36,7 +38,8 @@ class GoogleSearcher(Searcher):
                 return {
                     "title": result["title"],
                     "link": result["link"],
-                    "snippet": result["snippet"]
+                    "snippet": result["snippet"],
+                    "source": result["source"]
                 }
         return results
 
