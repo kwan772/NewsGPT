@@ -1,5 +1,5 @@
 import openai
-from agent import Agent
+from .agent import Agent
 from src.context import Context
 
 class ContextAgent(Agent):
