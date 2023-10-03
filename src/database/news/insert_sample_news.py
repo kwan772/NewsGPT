@@ -37,5 +37,5 @@ engine = create_engine(f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DA
 
 # Insert the sampled data into your table (assuming you have a table called 'news_samples')
 fake_sample.to_sql('news', engine, if_exists='append', index=False)
-real_sample.to_sql('news', engine, if_exists='append', index=False)
+# real_sample.to_sql('news', engine, if_exists='append', index=False)
 

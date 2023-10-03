@@ -19,13 +19,38 @@ class GoogleSearcher(Searcher):
         params = {"engine": "google", "q": query, "api_key": os.getenv("SERP_API_KEY")}
         response = requests.get("https://serpapi.com/search", params=params)
         response = response.json()
-        # print(response)
 
         return self.filter_results(response)
 
+    def search_all_sources(self, query):
+        params = {"engine": "google", "q": query, "api_key": os.getenv("SERP_API_KEY")}
+        response = requests.get("https://serpapi.com/search", params=params)
+        response = response.json()
+
+        return self.filter_results_all_sources(response)
+
+    def filter_results_all_sources(self, response):
+        results = []
+        pprint.pprint(response)
+        if "answer_box" in response:
+            return {
+                "title": response["answer_box"]["title"],
+                "link": response["answer_box"]["link"],
+                "snippet": response["answer_box"]["snippet"],
+                "source": response["answer_box"]["source"]
+            }
+        for result in response["organic_results"]:
+            return {
+                "title": result["title"],
+                "link": result["link"],
+                "snippet": result["snippet"],
+                "source": result["source"]
+            }
+        return results
+
     def filter_results(self, response):
         results = []
-        # pprint.pprint(response)
+        pprint.pprint(response)
         if "answer_box" in response and self.is_valid_source(response["answer_box"]["source"]):
             return {
                 "title": response["answer_box"]["title"],
