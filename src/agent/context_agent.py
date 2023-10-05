@@ -1,6 +1,5 @@
 import openai
 from .agent import Agent
-from src.context import Context
 
 class ContextAgent(Agent):
     def __init__(self, api_key):
