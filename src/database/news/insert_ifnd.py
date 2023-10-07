@@ -4,7 +4,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 # Load datasets
-sample = pd.read_csv('../../../data/kaggle/IFND.csv', encoding='ISO-8859-1')
+sample = pd.read_csv('../../../data/kaggle/fake_augmented.csv', encoding='ISO-8859-1')
 
 
 # Define your MySQL connection parameters
@@ -17,11 +17,12 @@ DATABASE = 'news_gpt'
 # Create a connection to the database
 engine = create_engine(f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
 
-sample['Date'] = pd.to_datetime(sample['Date'], errors='coerce')
-sample = sample.dropna(subset=['Date'])
+# sample['Date'] = pd.to_datetime(sample['Date'], errors='coerce')
+# sample = sample.dropna(subset=['Date'])
 
 # Insert the sampled data into your table (assuming you have a table called 'news_samples')
-sample.to_sql('IFND', engine, if_exists='append', index=False)
+sample['label'] = 'False'
+sample.to_sql('augmented_news', engine, if_exists='append', index=False)
 # real_sample.to_sql('news', engine, if_exists='append', index=False)
 # Display all columns
 pd.set_option('display.max_columns', None)

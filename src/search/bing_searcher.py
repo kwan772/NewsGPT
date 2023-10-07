@@ -6,30 +6,73 @@ import requests
 from .searcher import Searcher
 
 class BingSearcher(Searcher):
+    def __init__(self):
+        self.trusted_sources = ["https://www.nytimes.com",
+                                "https://www.washingtonpost.com",
+                                "https://www.cnn.com",
+                                "https://www.nbcnews.com",
+                                "https://www.wsj.com",
+                                "https://www.reuters.com",
+                                "https://apnews.com",
+                                "https://www.bbc.com/news",
+                                "https://www.usatoday.com",
+                                "https://www.cbsnews.com",
+                                "https://www.abcnews.go.com",
+                                "https://www.npr.org",
+                                "https://www.politico.com",
+                                "https://www.foxnews.com",
+                                "https://www.bloomberg.com",
+                                "https://www.latimes.com",
+                                "https://www.chicagotribune.com",
+                                "https://www.theguardian.com/us",
+                                "https://timesofindia.indiatimes.com",
+                                "https://www.thehindu.com",
+                                "https://www.ndtv.com",
+                                "https://indianexpress.com",
+                                "https://www.hindustantimes.com",
+                                "https://economictimes.indiatimes.com",
+                                "https://www.dnaindia.com",
+                                "https://www.news18.com",
+                                "https://www.firstpost.com",
+                                "https://www.indiatoday.in",
+                                "https://www.thequint.com",
+                                "https://www.deccanherald.com",
+                                "https://www.asianage.com",
+                                "https://www.business-standard.com",
+                                "https://www.telegraphindia.com",
+                                "https://www.financialexpress.com",
+                                "https://www.livemint.com",
+                                "https://www.outlookindia.com",
+                                "https://finance.yahoo.com"
+                                ]
+
     
     def general_search(self, query):
         # Not filtered!!
         # Web search
 
-        print(query)
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/search"
-            , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
+            # , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
+            , headers = {'Ocp-Apim-Subscription-Key': ""} #type: ignore
             , params = {
                 'q': query
                 , 'mkt': 'en-US' # May change this later...
             }
         )
-        print(response.json())
+        # print(response.json())
         response = response.json()['webPages']['value']
-    
-        response2return = [{k: v for k, v in d.items() if k in ['name','url','snippet']} for d in response]
+
+        response2return = [{k: v for k, v in d.items() if k in ['name','url','snippet']}
+    for d in response if any(trusted_url in d.get('url', '') for trusted_url in self.trusted_sources)]
+        # print([{k: v for k, v in d.items() if k in ['name','url','snippet']}
+    # for d in response])
+        # print(response2return)
         
         return response2return
 
     def knowledge_graph_search(self, query):
 
-        print(query)
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/entities"
             , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
@@ -39,7 +82,6 @@ class BingSearcher(Searcher):
             }
         )
 
-        print(response.json())
         response = response.json()['entities']['value']
 
         
@@ -62,7 +104,7 @@ class BingSearcher(Searcher):
         
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/news/search"
-            , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
+            , headers = {'Ocp-Apim-Subscription-Key': ""} #type: ignore
             , params = {
                 'q': query
                 , 'mkt': 'en-US' # May change this later...
@@ -90,6 +132,6 @@ if __name__ == "__main__":
     searcher = BingSearcher()
 
     knowledge_graph_results = searcher.knowledge_graph_search("Donald Trump age")
-    general_results = searcher.general_search("Trump wants Postal Service to charge 'much more' for Amazon shipments.")
+    general_results = searcher.general_search("Trump wants Postal Service to charge 'much more' for Amazon shipments")
     # news_results = searcher.news_search("Trump wants Postal Service to charge 'much more' for Amazon shipments.")
-    print(pprint.pprint(knowledge_graph_results))
+    # print(pprint.pprint(knowledge_graph_results))

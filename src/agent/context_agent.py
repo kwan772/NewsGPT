@@ -97,5 +97,5 @@ class ContextAgent(Agent):
             )  # get a new response from GPT where it can see the function response
             # print(second_response)
             context.add_message("assistant",second_response["choices"][0]["message"])
-            return second_response
+            return second_response["choices"][0]["message"]['content']
 

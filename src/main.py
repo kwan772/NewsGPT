@@ -16,7 +16,7 @@ if __name__ == "__main__":
     DATABASE = 'news_gpt'
     engine = create_engine(f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
     news = []
-    offset = 0
+    offset = 20
     with engine.connect() as connection:
         result = connection.execute(f'SELECT * FROM IFND_sample Limit 100000 offset {offset}')
 
