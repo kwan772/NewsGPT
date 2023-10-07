@@ -7,6 +7,10 @@ class Context:
         """Add a message to the context."""
         self.messages.append({"role": role, "content": content})
 
+    def add_function(self, role, function_name, content):
+        """Add a function to the context."""
+        self.messages.append({"role": role, "name": function_name, "content": content})
+
     def get_last_message(self, role=None):
         """Retrieve the last message, optionally filtered by role."""
         if role:

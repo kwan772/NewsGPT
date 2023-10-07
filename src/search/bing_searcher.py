@@ -1,15 +1,17 @@
 import os
+import pprint
+
 import requests
 
-from searcher import Searcher
-from dotenv import load_dotenv
+from .searcher import Searcher
 
 class BingSearcher(Searcher):
     
     def general_search(self, query):
         # Not filtered!!
         # Web search
-        
+
+        print(query)
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/search"
             , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
@@ -18,7 +20,7 @@ class BingSearcher(Searcher):
                 , 'mkt': 'en-US' # May change this later...
             }
         )
-        
+        print(response.json())
         response = response.json()['webPages']['value']
     
         response2return = [{k: v for k, v in d.items() if k in ['name','url','snippet']} for d in response]
@@ -26,7 +28,8 @@ class BingSearcher(Searcher):
         return response2return
 
     def knowledge_graph_search(self, query):
-        
+
+        print(query)
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/entities"
             , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
@@ -34,7 +37,11 @@ class BingSearcher(Searcher):
                 'q': query
                 , 'mkt': 'en-US' # May change this later...
             }
-        ).json()['entities']['value']
+        )
+
+        print(response.json())
+        response = response.json()['entities']['value']
+
         
         entities = []
         
@@ -74,15 +81,15 @@ class BingSearcher(Searcher):
             })
         
         return cleaned_news
+
+    def search(self, query):
+        pass
         
         
 if __name__ == "__main__":
-    load_dotenv()
-    
     searcher = BingSearcher()
 
     knowledge_graph_results = searcher.knowledge_graph_search("Donald Trump age")
     general_results = searcher.general_search("Trump wants Postal Service to charge 'much more' for Amazon shipments.")
-    news_results = searcher.news_search("Trump wants Postal Service to charge 'much more' for Amazon shipments.")
-    
-    pass
+    # news_results = searcher.news_search("Trump wants Postal Service to charge 'much more' for Amazon shipments.")
+    print(pprint.pprint(knowledge_graph_results))
