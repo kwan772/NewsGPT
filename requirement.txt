@@ -1,2 +1,4 @@
 newsapi-python
 googlesearch-python
+openai
+sqlalchemy
