@@ -19,7 +19,7 @@ if __name__ == "__main__":
     DATABASE = 'news_gpt'
     engine = create_engine(f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
     news = []
-    offset = 169
+    offset = 258
     with engine.connect() as connection:
         result = connection.execute(f'SELECT * FROM IFND_sample Limit 100000 offset {offset}')
 
@@ -170,12 +170,15 @@ if __name__ == "__main__":
                     escaped_content = context.get_messages().__str__().replace("'", "").replace('%', '%%')
                     escaped_explanation = explanation.replace("'", "").replace('%', '%%')
                     r = connection.execute(
-                        f"UPDATE IFND_sample SET few_shot_model_label = '{judgement}', few_shot_model_explanation = '{escaped_explanation}', few_shot_model_response='{escaped_content}' WHERE id = {new['id']}")
+                        f"UPDATE IFND_sample SET few_one_news_label = '{judgement}', few_one_news_explanation = '{escaped_explanation}', few_one_news_response='{escaped_content}' WHERE id = {new['id']}")
                 # print(r)
                 hasException = False
                 offset += 1
                 print(f"{offset} rows processed")
                 # print(context)
+                pprint.pprint(context.get_messages())
+
+                break
 
 
             except Exception as e:

@@ -54,7 +54,7 @@ class BingSearcher(Searcher):
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/search"
             # , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
-            , headers = {'Ocp-Apim-Subscription-Key': ""} #type: ignore
+            , headers = {'Ocp-Apim-Subscription-Key': "1562b40d25f3455c95346bc10aadc0a7"} #type: ignore
             , params = {
                 'q': query
                 , 'mkt': 'en-US' # May change this later...
@@ -68,6 +68,9 @@ class BingSearcher(Searcher):
         # print([{k: v for k, v in d.items() if k in ['name','url','snippet']}
     # for d in response])
         # print(response2return)
+
+        if len(response2return) > 0:
+            response2return = response2return[0]
         
         return response2return
 
@@ -75,7 +78,7 @@ class BingSearcher(Searcher):
 
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/entities"
-            , headers = {'Ocp-Apim-Subscription-Key': os.getenv("BING_KEY")} #type: ignore
+            , headers = {'Ocp-Apim-Subscription-Key': "1562b40d25f3455c95346bc10aadc0a7"} #type: ignore
             , params = {
                 'q': query
                 , 'mkt': 'en-US' # May change this later...
@@ -104,7 +107,7 @@ class BingSearcher(Searcher):
         
         response = requests.get(
             "https://api.bing.microsoft.com/v7.0/news/search"
-            , headers = {'Ocp-Apim-Subscription-Key': ""} #type: ignore
+            , headers = {'Ocp-Apim-Subscription-Key': "1562b40d25f3455c95346bc10aadc0a7"} #type: ignore
             , params = {
                 'q': query
                 , 'mkt': 'en-US' # May change this later...
@@ -135,3 +138,5 @@ if __name__ == "__main__":
     general_results = searcher.general_search("Trump wants Postal Service to charge 'much more' for Amazon shipments")
     # news_results = searcher.news_search("Trump wants Postal Service to charge 'much more' for Amazon shipments.")
     # print(pprint.pprint(knowledge_graph_results))
+    print(knowledge_graph_results)
+    print(general_results)
